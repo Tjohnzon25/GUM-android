@@ -65,6 +65,8 @@ public class LandingPage extends AppCompatActivity {
     public static final String W_SURVEY_COUNT = "w_survey_count";
     public static final String W_SURVEY_Q = "w_survey_q";
     public static final String W_SURVEY_QC = "w_survey_qc";
+
+    public static final String test = "Delete this later, this variable is for testing.";
     public static String fitnessLevel = "";
     public static String avatarName;
     String profile_path_total;
@@ -405,6 +407,21 @@ public class LandingPage extends AppCompatActivity {
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse("https://gum-website.herokuapp.com/"));
                 startActivity(i);
+                break;
+            case R.id.contact:
+                Intent j = new Intent(Intent.ACTION_VIEW);
+                j.setData(Uri.parse("https://www.markangelhealingarts.com/contact.html"));
+                startActivity(j);
+                break;
+            case R.id.about_mark:
+                Intent m = new Intent(Intent.ACTION_VIEW);
+                m.setData(Uri.parse("https://www.markangelhealingarts.com/about.html"));
+                startActivity(m);
+                break;
+            case R.id.Donate:
+                Intent s = new Intent(Intent.ACTION_VIEW);
+                s.setData(Uri.parse("https://www.paypal.com/donate?token=a1QKv5G3IZ5uowCm1N_s7OUN3hxGZEHO8QEaSLTNEj8ofuoE95oDoweRV--ul1zKS_at90xDrPiyR2yG"));
+                startActivity(s);
                 break;
         }
 

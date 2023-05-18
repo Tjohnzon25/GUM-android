@@ -1,5 +1,7 @@
 package com.example.a499_android;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,30 +34,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class CreateGroups extends AppCompatActivity {
-@Override
-protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // setContentView(R.layout.activity_create_groups);
-        setContentView(R.layout.paynow);
-
-        }
-public void open(View view){
-        Intent m = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.paypal.com/paypalme/getupandmove?country.x=US&locale.x=en_US"));
-        m.setData(Uri.parse("https://www.paypal.com/paypalme/getupandmove?country.x=US&locale.x=en_US"));
-        startActivity(m);
-        }
-
-
-
-
-
-
-  /*  private final String TAG = "CreateGroups";
-
+public class CreateGroupsAdmin extends AppCompatActivity {
+    private final String TAG = "CreateGroupsAdmin";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference groups = db.collection("Groups");
+    // CollectionReference groups = db.collection("Groups");
+    CollectionReference AdminGroups = db.collection("AdminGroups");
     DocumentReference groupDocRef;
+
+
+    public void onCreate(View view){
+        if(getSharedPreferences("userDefaults", Context.MODE_PRIVATE).getString("storedEmail","").equals("markangelhealingarts@gmail.com")){
+            Intent intent = new Intent(this, CreateGroups.class);
+            startActivity(intent);
+
+        }else{
+
+        }
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,78 +73,80 @@ public void open(View view){
                 if(nameCheck){
                     if(passwordCheck){
                         String inviteCode = inviteCodeGenerate();
-                        groupDocRef = groups.document(inviteCode);
+                        groupDocRef = AdminGroups.document(inviteCode);
                         //groupDocRef = groups.document("262288");
                         checkInviteCode(new FirestoreCallback() {
                             @Override
                             public void onSuccess(DocumentSnapshot document) {
-                                String uName = SaveSharedPreference.getUserName(CreateGroups.this);
+                                String uName = SaveSharedPreference.getUserName(CreateGroupsAdmin.this);
                                 if(document.exists()){
                                     //TODO
                                     //Add something here in case this randomly generated code already exists
-                                    Toast.makeText(CreateGroups.this, "An Error Occurred. Please Try Again.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(CreateGroupsAdmin.this, "An Error Occurred. Please Try Again.", Toast.LENGTH_SHORT).show();
                                 } else {
                                     TextView gPts = findViewById(R.id.createGroupPoints);
                                     String points = gPts.getText().toString();
                                     Map<String, Object> newGroup = new HashMap<>();
-                                    newGroup.put("Group Name", groupName);
-                                    newGroup.put("Group", inviteCode);
-                                    newGroup.put("Password", groupPassword);
+                                    newGroup.put("Admin Group Name", groupName);
+                                    newGroup.put("AdminGroups", inviteCode);
+                                    newGroup.put("APassword", groupPassword);
                                     newGroup.put("Point Goal", 0);
-                                    newGroup.put("Leader Name", uName);
+                                    newGroup.put("AdminLeader Name", uName);
                                     newGroup.put("Members", Arrays.asList());
+                                    //  Object streaks;
+                                    //  newGroup.put("Streaks", streaks);
                                     newGroup.put("Point Goal", points);
                                     //newGroup.put("Members", Arrays.asList());
                                     //Add new group to database
-                                    groups.document(inviteCode).set(newGroup)
+                                    AdminGroups.document(inviteCode).set(newGroup)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            Toast.makeText(CreateGroups.this,
-                                                    "Group has been successfully created",
-                                                    Toast.LENGTH_SHORT)
-                                                    .show();
-                                        }
-                                    })
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Toast.makeText(CreateGroupsAdmin.this,
+                                                                    "Group has been successfully created",
+                                                                    Toast.LENGTH_SHORT)
+                                                            .show();
+                                                }
+                                            })
                                             .addOnFailureListener(new OnFailureListener() {
                                                 @Override
                                                 public void onFailure(@NonNull Exception e) {
                                                     Log.w(TAG, "Error writing document", e);
-                                                    Toast.makeText(CreateGroups.this,
-                                                            "Something went wrong with the creating account " +
-                                                                    "process",
-                                                            Toast.LENGTH_SHORT)
+                                                    Toast.makeText(CreateGroupsAdmin.this,
+                                                                    "Something went wrong with the creating account " +
+                                                                            "process",
+                                                                    Toast.LENGTH_SHORT)
                                                             .show();
                                                 }
                                             });
                                     DocumentReference userDocReference = db.collection("Users")
                                             .document(uName);
-                                    userDocReference.update("Groups", FieldValue.arrayUnion(inviteCode))
+                                    userDocReference.update("AdminGroups", FieldValue.arrayUnion(inviteCode))
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            Intent intent = new Intent(CreateGroups.this, CreateGroupSuccessPage.class);
-                                            intent.putExtra("InviteCode", inviteCode);
-                                            startActivity(intent);
-                                            finish();
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(CreateGroups.this,
-                                                    "Error. Could not properly save Group", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    Intent intent = new Intent(CreateGroupsAdmin.this, CreateGroupSuccessPageAdmin.class);
+                                                    intent.putExtra("InviteCode", inviteCode);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(CreateGroupsAdmin.this,
+                                                            "Error. Could not properly save Group", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
                                 }
                             }
                         });
 
                     } else {
-                        Toast.makeText(CreateGroups.this,
+                        Toast.makeText(CreateGroupsAdmin.this,
                                 "Password must be at least 5 characters", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(CreateGroups.this,
+                    Toast.makeText(CreateGroupsAdmin.this,
                             "Group name must be at least 5 characters", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -203,9 +200,10 @@ public void open(View view){
         });
     }
 
-   */
 
     private interface FirestoreCallback {
         void onSuccess(DocumentSnapshot document);
     }
 }
+
+

@@ -18,10 +18,23 @@
         android:orderInCategory="102"
         android:title="Change Level"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/about"
+        android:orderInCategory="103"
+        android:title="About"
+        app:showAsAction="never"/>
+
     <item
         android:id="@+id/gum_website"
         android:orderInCategory="102"
         android:title="Gum Website"
+        app:showAsAction="never"/>
+
+    <item
+        android:id ="@+id/About"
+        android:orderInCategory="104"
+        android:title="About"
         app:showAsAction="never"/>
 
 </menu>
